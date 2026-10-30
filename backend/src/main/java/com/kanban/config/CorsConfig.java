@@ -1,7 +1,6 @@
 package com.kanban.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -10,7 +9,10 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://kanban-three-murex.vercel.app") // Must be the exact URL, no '*'
+                .allowedOrigins(
+                    "http://localhost:5173", // For local Vite development
+                    "https://kanban-1-g1up.onrender.com" // Replace with your actual Render frontend URL when ready
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
