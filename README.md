@@ -2,7 +2,7 @@
 
 A full-stack Kanban task management application featuring interactive drag-and-drop functionality, persistent state management, and a robust relational database backend. 
 
-**[View Live Application](https://kanban-board.vercel.app)** 
+**[View Live Application](https://kanban-three-murex.vercel.app)** 
 
 ## 🚀 Features
 
