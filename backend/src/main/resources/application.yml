@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://dpg-dbg9rm9srm7s73cuiun0-a.oregon-postgres.render.com:5432/kanban_db_7b4p?sslmode=require}
-    username: ${SPRING_DATASOURCE_USERNAME:kanban_db_7b4p_user}
-    password: ${SPRING_DATASOURCE_PASSWORD:9MTCgnuIAywQ7s8kIT4Gqx5CduXV1w0H}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/kanban}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -13,4 +13,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  port: 8080
+  port: ${PORT:8080}
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}

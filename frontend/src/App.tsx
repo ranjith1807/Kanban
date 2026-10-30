@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd";
 import axios from "axios";
+import "./App.css";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/v1";
 
@@ -77,76 +78,88 @@ export default function App() {
   };
 
   return (
-    <div className="p-8 min-h-screen font-sans">
-      <h1 className="text-3xl font-bold text-slate-800 mb-8 tracking-tight">Project Board</h1>
-      
+    <main className="app-shell">
+      <header className="board-header">
+        <div>
+          <p className="board-eyebrow">WORKSPACE / OVERVIEW</p>
+          <h1>Project Board</h1>
+          <p className="board-subtitle">A little progress every day adds up.</p>
+        </div>
+        <div className="board-summary" aria-label={`${lists.length} lists`}>
+          <span className="summary-indicator" />
+          {lists.length} {lists.length === 1 ? "list" : "lists"}
+        </div>
+      </header>
+
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex gap-6 items-start overflow-x-auto pb-4">
-          {lists.map((list) => (
+        <div className="board-columns">
+          {lists.map((list, listIndex) => (
             <Droppable key={list.id} droppableId={String(list.id)}>
               {(provided) => (
-                <div 
-                  ref={provided.innerRef} 
-                  {...provided.droppableProps} 
-                  className="bg-slate-200/50 w-80 p-4 rounded-xl shrink-0"
+                <section
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className={`board-column column-tone-${listIndex % 3}`}
                 >
-                  <h2 className="font-semibold text-slate-700 mb-4 px-1">{list.title}</h2>
+                  <div className="column-heading">
+                    <span className={`column-dot column-dot-${listIndex % 3}`} />
+                    <h2>{list.title}</h2>
+                    <span className="column-count">{list.cards.length}</span>
+                  </div>
                   
-                  <div className="flex flex-col gap-3 min-h-[50px]">
+                  <div className="card-stack">
                     {list.cards.map((card: any, index: number) => (
                       <Draggable key={card.id} draggableId={String(card.id)} index={index}>
                         {(provided, snapshot) => (
-                          <div 
-                            ref={provided.innerRef} 
-                            {...provided.draggableProps} 
-                            {...provided.dragHandleProps} 
-                            className={`bg-white p-3 rounded-lg shadow-sm border border-slate-200 
-                                ${snapshot.isDragging ? 'shadow-lg ring-2 ring-blue-400 rotate-2' : 'hover:border-slate-300'} 
-                                transition-all duration-200`}
+                          <article
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={`task-card${snapshot.isDragging ? " task-card-dragging" : ""}`}
                           >
-                            <p className="text-slate-700 text-sm">{card.title}</p>
-                          </div>
+                            <span className="card-grip" aria-hidden="true">⠿</span>
+                            <p>{card.title}</p>
+                          </article>
                         )}
                       </Draggable>
                     ))}
                     {provided.placeholder}
                   </div>
                   
-                  {/* Add Task Input Area */}
-                  <div className="mt-4">
+                  <div className="add-card-area">
                     {activeListId === list.id ? (
-                      <div className="flex flex-col gap-2">
-                        <input 
+                      <div className="add-card-form">
+                        <input
                           autoFocus
                           type="text" 
                           placeholder="What needs to be done?" 
-                          className="border border-slate-300 p-2 rounded-lg w-full text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                          aria-label={`New card for ${list.title}`}
+                          className="task-input"
                           value={newTaskTitle}
                           onChange={(e) => setNewTaskTitle(e.target.value)}
                           onKeyDown={(e) => { if (e.key === 'Enter') addTask(list.id); }}
                           onBlur={() => { if(!newTaskTitle) setActiveListId(null); }}
                         />
-                        <div className="flex gap-2">
-                            <button onClick={() => addTask(list.id)} className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700">Add</button>
-                            <button onClick={() => {setActiveListId(null); setNewTaskTitle("");}} className="text-slate-500 hover:text-slate-700 px-2 text-sm font-medium">Cancel</button>
+                        <div className="form-actions">
+                          <button onClick={() => addTask(list.id)} className="add-button">Add card</button>
+                          <button onClick={() => {setActiveListId(null); setNewTaskTitle("");}} className="cancel-button">Cancel</button>
                         </div>
                       </div>
                     ) : (
-                      <button 
+                      <button
                         onClick={() => setActiveListId(list.id)}
-                        className="flex items-center gap-1 text-slate-500 hover:text-slate-800 hover:bg-slate-300/50 w-full p-2 rounded-lg transition-colors text-sm font-medium"
+                        className="add-card-button"
                       >
-                        <span className="text-lg leading-none">+</span> Add a card
+                        <span aria-hidden="true">+</span> Add a card
                       </button>
                     )}
                   </div>
-
-                </div>
+                </section>
               )}
             </Droppable>
           ))}
         </div>
       </DragDropContext>
-    </div>
+    </main>
   );
 }

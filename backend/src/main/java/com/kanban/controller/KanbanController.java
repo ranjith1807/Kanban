@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(origins = "*") // Allows your Vite frontend to connect without CORS issues
 public class KanbanController {
 
     private final BoardListRepository listRepo;

@@ -25,6 +25,9 @@ public class Card {
     @Column(nullable = false)
     private Double position;
 
+    @Column
+    private String priority = "MEDIUM";
+
     // Many cards belong to one list.
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "list_id", nullable = false)
