@@ -7,18 +7,18 @@ services:
     plan: free
     healthCheckPath: /api/v1/lists
     envVars:
-      - key: SPRING_DATASOURCE_URL
-        fromDatabase:
-          name: kanban-db
-          property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: kanban-db
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: kanban-db
-          property: password
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSLMODE
+        value: require
       - key: CORS_ALLOWED_ORIGINS
         value: https://kanban-frontend.onrender.com
 
@@ -31,10 +31,3 @@ services:
     envVars:
       - key: VITE_API_BASE_URL
         value: https://kanban-backend.onrender.com/api/v1
-
-databases:
-  - name: kanban-db
-    databaseName: kanban
-    user: kanban
-    region: oregon
-    plan: free

@@ -81,17 +81,17 @@ The frontend will be available at `http://localhost:5173`.
 
 ## 🚢 Deploy to Render
 
-The root `render.yaml` Blueprint deploys the frontend, Dockerized backend, and PostgreSQL database together.
+The root `render.yaml` Blueprint deploys the frontend and Dockerized backend and reuses an existing Render PostgreSQL database.
 
 1. Push this repository to GitHub.
 2. In Render, choose **New → Blueprint** and connect the repository.
 3. Review the services defined in `render.yaml` and choose **Apply**.
-4. Wait for the database and both services to finish deploying. The frontend is served at `https://kanban-frontend.onrender.com`.
+4. Wait for both services to finish deploying. The frontend is served at `https://kanban-frontend.onrender.com`.
 
-The Blueprint connects the backend to the managed database, configures the backend's allowed frontend origin, and sets the frontend's `VITE_API_BASE_URL`. The backend reads Render's `PORT` automatically.
+The Blueprint does not create a database. It expects you to reuse an existing Render PostgreSQL database by setting `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` on the backend web service. It configures the backend's allowed frontend origin and sets the frontend's `VITE_API_BASE_URL`. The backend reads Render's `PORT` automatically.
 
 If Render reports that a service name is already taken, change the corresponding `name` in `render.yaml` and update the frontend URL in both `CORS_ALLOWED_ORIGINS` and `VITE_API_BASE_URL` to match.
 
 For local development, set `CORS_ALLOWED_ORIGINS` to the frontend origin if it differs from `http://localhost:5173`.
 
-The Blueprint uses Render's free plans as a starting point. Free web services can spin down when idle, and free PostgreSQL databases are temporary; choose a paid database plan for data you need to keep.
+The Blueprint uses Render's free plan for the web services as a starting point. Free web services can spin down when idle. Keep a database on a paid plan if its data must persist.
